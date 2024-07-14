@@ -1,0 +1,77 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.search-section {
+  flex: 0 1 20%;
+  padding: 10px;
+  background-color: #23262e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & input {
+    outline: 0;
+    border: 0;
+    background-color: #353c50;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 10px 0 0 10px;
+    padding-left: 15px;
+  }
+  & button {
+    background-color: #457e5d;
+    border-radius: 0 15px 15px 0;
+  }
+}
+
+.results-section {
+  flex: 1 1 80%;
+  padding: 20px;
+  background-color: #353c50;
+}
+
+.results-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+  width: 80%;
+  height: 100%;
+  & div {
+    width: 100px;
+    height: 80px;
+    & p {
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.results-container .pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.pagination {
+  & button {
+    top: 50%;
+    right: 5px;
+    width: 70px;
+    height: 60px;
+    position: absolute;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 30px;
+    background: none;
+    &:first-child {
+      left: 5px;
+    }
+  }
+}

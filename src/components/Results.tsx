@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React from "react";
 
 interface Result {
   name: string;
@@ -9,21 +9,17 @@ interface ResultsProps {
   results: Result[];
 }
 
-class Results extends Component<ResultsProps> {
-  render() {
-    const { results } = this.props;
-
-    return (
-      <div className="results-container">
-        {results.map((result) => (
-          <div key={result.name}>
-            <p>{result.name}</p>
-            <a href={result.url}>More details</a>
-          </div>
-        ))}
-      </div>
-    );
-  }
-}
+const Results: React.FC<ResultsProps> = ({ results }) => {
+  return (
+    <div className="results-container">
+      {results.map((result) => (
+        <div key={result.name}>
+          <p>{result.name}</p>
+          <a href={`/detail/${result.name}`}>More details</a>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default Results;

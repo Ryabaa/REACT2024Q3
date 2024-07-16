@@ -81,9 +81,9 @@ const App: React.FC = () => {
           </div>
           <div className="results-section">
             {loading ? (
-              <p>Loading...</p>
+              <p className="loader">Loading...</p>
             ) : error ? (
-              <p>Error fetching data.</p>
+              <p className="loader">Error fetching data.</p>
             ) : (
               <Routes>
                 <Route path="/" element={<Results results={results} />} />

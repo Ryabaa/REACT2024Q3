@@ -1,41 +1,33 @@
-import { Component, ChangeEvent, FormEvent } from "react";
+import React, { useState } from "react";
 
 interface SearchProps {
   onSearch: (query: string) => void;
   initialQuery: string;
 }
 
-interface SearchState {
-  query: string;
-}
+const Search: React.FC<SearchProps> = ({ onSearch, initialQuery }) => {
+  const [query, setQuery] = useState<string>(initialQuery);
 
-class Search extends Component<SearchProps, SearchState> {
-  state: SearchState = {
-    query: this.props.initialQuery,
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
   };
 
-  handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ query: e.target.value });
-  };
-
-  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.onSearch(this.state.query);
+    onSearch(query);
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          value={this.state.query}
-          onChange={this.handleInputChange}
-          placeholder="Search for a Pokémon"
-        />
-        <button type="submit">Search</button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+        placeholder="Search for a Pokémon"
+      />
+      <button type="submit">Search</button>
+    </form>
+  );
+};
 
 export default Search;

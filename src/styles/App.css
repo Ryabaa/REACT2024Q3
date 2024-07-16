@@ -1,0 +1,173 @@
+.app {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.search-section {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 20%;
+          flex: 0 1 20%;
+  padding: 10px;
+  background-color: #23262e;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.search-section input {
+  outline: 0;
+  border: 0;
+  background-color: #353c50;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 10px 0 0 10px;
+  padding-left: 15px;
+}
+
+.search-section button {
+  background-color: #457e5d;
+  border-radius: 0 15px 15px 0;
+}
+
+.results-section {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 80%;
+          flex: 1 1 80%;
+  padding: 20px;
+  background-color: #353c50;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.results-section .loader {
+  font-size: 30px;
+  margin-bottom: 170px;
+}
+
+.results-container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  margin-left: 50%;
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  width: 80%;
+  height: 100%;
+}
+
+.results-container div {
+  width: 100px;
+  height: 80px;
+}
+
+.results-container div p {
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.results-container .pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 20px;
+}
+
+.pagination button {
+  top: 50%;
+  right: 5px;
+  width: 70px;
+  height: 60px;
+  position: absolute;
+  font-size: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-bottom: 30px;
+  background: none;
+}
+
+.pagination button:first-child {
+  left: 5px;
+}
+
+.pagination span {
+  position: absolute;
+  top: 215px;
+  left: 50px;
+  border-radius: 50%;
+  background-color: #23262e;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.detail-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 80%;
+  margin-bottom: 170px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.detail-section h2 {
+  text-transform: uppercase;
+}
+
+.detail-section img {
+  width: 200px;
+}
+
+.detail-section p {
+  font-size: 30px;
+}
+/*# sourceMappingURL=App.css.map */

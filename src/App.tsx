@@ -1,146 +1,106 @@
-import { Component } from "react";
+import React, { useEffect, useState } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
 import Search from "./components/Search";
 import Results from "./components/Results";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Pagination from "./components/Pagination";
+import DetailSection from "./components/DetailSection";
+import NotFound from "./components/NotFound";
+import { Result } from "./types/types";
+
 import "./styles/App.css";
 
-interface AppState {
-  results: Result[];
-  loading: boolean;
-  error: boolean;
-  query: string;
-  page: number;
-  totalCount: number;
-}
+const App: React.FC = () => {
+  const [results, setResults] = useState<Result[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [query, setQuery] = useLocalStorage<string>("pokemonQuery", "");
+  const [page, setPage] = useState<number>(1);
+  const [totalCount, setTotalCount] = useState<number>(0);
 
-interface Result {
-  name: string;
-  url: string;
-}
+  useEffect(() => {
+    fetchTotalCount();
+    fetchResults(query, page);
+  }, [query, page]);
 
-class App extends Component<AppState> {
-  state: AppState = {
-    results: [],
-    loading: false,
-    error: false,
-    query: localStorage.getItem("pokemonQuery") || "",
-    page: 1,
-    totalCount: 0,
-  };
-
-  componentDidMount() {
-    this.fetchTotalCount();
-    this.fetchResults(this.state.query, this.state.page);
-  }
-
-  fetchTotalCount = async () => {
+  const fetchTotalCount = async () => {
     try {
       const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1");
       const data = await response.json();
-      this.setState({ totalCount: data.count });
+      setTotalCount(data.count);
     } catch (error) {
       console.error(error);
-      this.setState({ error: true });
+      setError(true);
     }
   };
 
-  fetchResults = async (query: string, page: number) => {
-    this.setState({ loading: true, error: false });
+  const fetchResults = async (query: string, page: number) => {
+    setLoading(true);
+    setError(false);
 
     try {
+      const apiUrl = `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${(page - 1) * 10}`;
+
       if (query) {
         const response = await fetch(
-          "https://pokeapi.co/api/v2/pokemon?limit=100000",
+          `https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`,
         );
         const data = await response.json();
-        const pokemonIndex = data.results.findIndex(
-          (p: Result) => p.name === query.toLowerCase(),
-        );
-
-        if (pokemonIndex !== -1) {
-          const pageIndex = Math.floor(pokemonIndex / 10) + 1;
-          this.setState({ page: pageIndex }, () => {
-            this.fetchPageResults(pageIndex);
-          });
-        } else {
-          this.setState({ results: [], loading: false });
-        }
+        const results = [{ name: data.name, url: data.url }];
+        setResults(results);
       } else {
-        this.fetchPageResults(page);
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        setResults(data.results);
       }
+
+      setLoading(false);
     } catch (error) {
       console.error(error);
-      this.setState({ error: true, loading: false });
+      setError(true);
+      setLoading(false);
     }
   };
 
-  fetchPageResults = async (page: number) => {
-    try {
-      const offset = (page - 1) * 10;
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`,
-      );
-      const data = await response.json();
-      this.setState({ results: data.results, loading: false });
-    } catch (error) {
-      console.error(error);
-      this.setState({ error: true, loading: false });
-    }
+  const handleSearch = (query: string) => {
+    setQuery(query);
+    setPage(1);
   };
 
-  handleSearch = (query: string) => {
-    localStorage.setItem("pokemonQuery", query);
-    this.setState({ query, page: 1 }, () => {
-      this.fetchResults(query, 1);
-    });
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
-  handlePageChange = (newPage: number) => {
-    this.setState({ page: newPage }, () => {
-      this.fetchResults(this.state.query, newPage);
-    });
-    this.setState({ query: "" });
-  };
-
-  render() {
-    const { results, loading, error, query, page, totalCount } = this.state;
-    const totalPages = Math.ceil(totalCount / 10);
-
-    return (
-      <ErrorBoundary>
+  return (
+    <ErrorBoundary>
+      <Router>
         <div className="app">
           <div className="search-section">
-            <Search onSearch={this.handleSearch} initialQuery={query} />
+            <Search onSearch={handleSearch} initialQuery={query} />
           </div>
           <div className="results-section">
             {loading ? (
               <p>Loading...</p>
             ) : error ? (
               <p>Error fetching data.</p>
-            ) : results.length === 0 ? (
-              <p>No results found.</p>
             ) : (
-              <Results results={results} />
+              <Routes>
+                <Route path="/" element={<Results results={results} />} />
+                <Route path="/detail/:name" element={<DetailSection />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
             )}
-            <div className="pagination">
-              <button
-                onClick={() => this.handlePageChange(page - 1)}
-                disabled={page <= 1}
-              >
-                {"<"}
-              </button>
-              <button
-                onClick={() => this.handlePageChange(page + 1)}
-                disabled={page >= totalPages}
-              >
-                {">"}
-              </button>
-            </div>
+            <Pagination
+              currentPage={page}
+              totalPages={Math.ceil(totalCount / 10)}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+      </Router>
+    </ErrorBoundary>
+  );
+};
 
 export default App;

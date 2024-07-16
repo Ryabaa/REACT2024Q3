@@ -1,9 +1,5 @@
 import React from "react";
-
-interface Result {
-  name: string;
-  url: string;
-}
+import { Result } from "../types/types";
 
 interface ResultsProps {
   results: Result[];
